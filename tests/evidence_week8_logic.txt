@@ -1,0 +1,46 @@
+TECHGEAR WEEK 8 CART LOGIC TESTS
+============================================================
+ADD, UPDATE, REMOVE, CLEAR
+PASS  Add a product
+      -> {"mouse":1}
+PASS  Adding again increases the quantity
+PASS  Cart item count is the sum of quantities
+PASS  Out-of-stock product cannot be added
+PASS  Unknown product cannot be added
+PASS  Quantity 0 is invalid
+PASS  Negative quantity is invalid
+PASS  Decimal quantity is invalid
+PASS  Adding more than stock is limited to stock
+      -> limit 3
+PASS  Adding when all stock is already in the cart is refused
+PASS  Update quantity
+PASS  Invalid quantity input rejected: "0"
+PASS  Invalid quantity input rejected: "-1"
+PASS  Invalid quantity input rejected: "abc"
+PASS  Invalid quantity input rejected: ""
+PASS  Invalid quantity input rejected: "2.5"
+PASS  Invalid quantity input rejected: "1e2"
+PASS  Invalid quantity input rejected: " "
+PASS  Quantity above stock is capped to stock
+PASS  Quantity is never above 99
+PASS  Cannot set quantity for an item not in the cart
+PASS  Remove one item leaves the others
+PASS  Clear empties the cart
+
+STATE AND CORRUPTED DATA
+PASS  State is stored in localStorage (survives refresh and page changes)
+      -> {"router":2}
+PASS  Corrupted storage gives an empty cart instead of an error
+PASS  Invalid saved entries are dropped, big quantities capped
+      -> {"router":3,"x":99}
+PASS  Array instead of object is ignored
+
+TOTALS
+PASS  Subtotal = sum of unit price x quantity
+      -> {"items":3,"subtotal":170000}
+PASS  Unavailable items are not counted
+PASS  Quantity above stock is counted only up to stock
+PASS  Unknown product gives 0, not NaN
+PASS  Empty cart totals 0
+PASS  Money format
+RESULT: 33 passed, 0 failed

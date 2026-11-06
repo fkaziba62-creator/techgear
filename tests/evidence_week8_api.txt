@@ -1,0 +1,18 @@
+TECHGEAR WEEK 8 CART API TESTS
+============================================================
+PASS  Works without logging in (guest carts)
+PASS  Price comes from the database, not from the browser
+      -> keyboard = 42000
+PASS  Stock comes from the database
+PASS  Out-of-stock product is reported with stock 0
+PASS  Unknown product is reported as not found
+PASS  A price/stock change in the database shows up immediately
+PASS  SQL injection in a product code is harmless
+PASS  Invalid payload rejected
+PASS  Too many items rejected
+PASS  Non-JSON request rejected
+PASS  Response is not cached
+PASS  New pages are served
+PASS  Catalogue file (js/products.js) matches the database on price and stock for all products
+      -> []
+RESULT: 13 passed, 0 failed

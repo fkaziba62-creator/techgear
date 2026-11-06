@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in | TechGear Computer Accessories Shop</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html"><img src="images/logo.svg" alt="" width="36" height="36"><span>TechGear</span></a>
+    <form class="header-search" role="search" action="products.html" method="get"><input type="search" name="q" placeholder="Search products" aria-label="Search products" maxlength="60" autocomplete="off"><button type="submit" aria-label="Search">&#128269;</button></form>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav id="mainNav" aria-label="Main"><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="cart.html">Cart (<span id=cartCount>0</span>)</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
+  </div>
+</header>
+<main class="wrap"><div class="auth-box"><h1>Log in</h1>
+<form id="loginForm" novalidate><label>Email<input type="email" id="loginEmail" autocomplete="email" ></label><label>Password<input type="password" id="loginPassword" autocomplete="current-password" maxlength="128"></label><p class="form-error" id="formError" role="alert"></p>
+<button class="btn" type="submit">Log in</button></form>
+<p>New customer? <a href="register.html">Create an account</a></p></div></main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div><h3>TechGear Computer Accessories Shop</h3><p>Kitagata, Sheema District, Uganda</p></div>
+    <div><h3>Contact</h3><p>Phone: +256 761 421 472<br>Email: info@techgear.example</p></div>
+    <div><h3>Shop</h3><p><a href="products.html">All products</a><br><a href="about.html">Delivery &amp; collection</a><br><a href="contact.html">Returns policy</a></p></div>
+  </div>
+</footer>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/script.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

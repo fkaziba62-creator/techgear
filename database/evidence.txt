@@ -1,0 +1,192 @@
+TECHGEAR DATABASE EVIDENCE
+============================================================
+
+[Setup] Row counts after schema.sql + seed.sql
+  categories  6
+  products    24
+  customers   4
+  orders      4
+  order_items 8
+  payments    4
+
+[Setup] Tables: categories, products, customers, orders, order_items, payments
+[Setup] Foreign keys on orders: [('customers', 'customer_id', 'customer_id')]
+
+[C1 Add a new product]
+INSERT INTO products (sku,name,description,price,stock,image,category_id)
+VALUES ('webcam','HD Webcam 1080p','USB webcam with built-in microphone.',80000,10,'placeholder.svg',
+        (SELECT category_id FROM categories WHERE name='Input devices'));
+>>> RESULT
+OK (1 row(s) affected)
+
+[C2 Add a new customer]
+INSERT INTO customers (full_name,phone,email,address) VALUES ('Mugisha Allan','0753444888','allan@example.com','Kabwohe Town');
+>>> RESULT
+OK (1 row(s) affected)
+
+[C3 Place a new order with two items (and reduce stock)]
+INSERT INTO orders (order_no,customer_id,order_date,delivery_method,delivery_fee)
+VALUES ('TG-100005',(SELECT customer_id FROM customers WHERE phone='0753444888'),'2026-11-01','collection',0);
+INSERT INTO order_items (order_id,product_id,quantity,unit_price)
+SELECT (SELECT order_id FROM orders WHERE order_no='TG-100005'),product_id,1,price FROM products WHERE sku IN ('webcam','mousepad');
+UPDATE products SET stock = stock - 1 WHERE sku IN ('webcam','mousepad');
+>>> RESULT
+OK (1 row(s) affected)
+OK (2 row(s) affected)
+OK (2 row(s) affected)
+
+[R1 List all products with category (catalogue listing)]
+SELECT p.sku, p.name, c.name AS category, p.price, p.stock FROM products p JOIN categories c USING(category_id) ORDER BY c.name, p.name LIMIT 10;
+>>> RESULT
+sku         | name                        | category      | price | stock
+------------+-----------------------------+---------------+-------+------
+speaker     | Bluetooth Speaker           | Audio         | 85000 | 7    
+headphones  | Stereo Headphones           | Audio         | 55000 | 18   
+usbheadset  | USB Headset with Microphone | Audio         | 60000 | 9    
+earphones   | Wired Earphones with Mic    | Audio         | 15000 | 50   
+backpack    | Laptop Backpack             | Bags          | 85000 | 0    
+laptopbag   | Laptop Bag 15.6"            | Bags          | 65000 | 14   
+sleeve      | Laptop Sleeve 14"           | Bags          | 35000 | 20   
+gamingmouse | Gaming Mouse 3200 DPI       | Input devices | 40000 | 0    
+webcam      | HD Webcam 1080p             | Input devices | 80000 | 9    
+mousepad    | Mouse Pad (Large)           | Input devices | 8000  | 59   
+(10 row(s))
+
+[R2 Search products by keyword 'mouse']
+SELECT sku, name, price FROM products WHERE name LIKE '%mouse%' OR description LIKE '%mouse%';
+>>> RESULT
+sku         | name                            | price
+------------+---------------------------------+------
+mouse       | Wireless Mouse                  | 25000
+combo       | Wireless Keyboard & Mouse Combo | 75000
+gamingmouse | Gaming Mouse 3200 DPI           | 40000
+mousepad    | Mouse Pad (Large)               | 8000 
+(4 row(s))
+
+[R3 Filter: in-stock Storage products under UGX 100,000, cheapest first]
+SELECT p.name, p.price, p.stock FROM products p JOIN categories c USING(category_id) WHERE c.name='Storage' AND p.stock>0 AND p.price<=100000 ORDER BY p.price;
+>>> RESULT
+name               | price | stock
+-------------------+-------+------
+Flash Disk 32GB    | 28000 | 80   
+Flash Disk 64GB    | 40000 | 45   
+MicroSD Card 128GB | 45000 | 22   
+(3 row(s))
+
+[R4 Product count and average price per category]
+SELECT c.name AS category, COUNT(*) AS products, ROUND(AVG(p.price)) AS avg_price FROM categories c JOIN products p USING(category_id) GROUP BY c.category_id ORDER BY products DESC;
+>>> RESULT
+category       | products | avg_price
+---------------+----------+----------
+Input devices  | 6        | 45500.0  
+Audio          | 4        | 53750.0  
+Networking     | 4        | 65000.0  
+Power & cables | 4        | 53750.0  
+Storage        | 4        | 75750.0  
+Bags           | 3        | 61667.0  
+(6 row(s))
+
+[R5 Order summary view]
+SELECT * FROM v_order_summary ORDER BY order_no;
+>>> RESULT
+order_no  | full_name        | order_date | delivery_method | status    | items_total | delivery_fee | grand_total
+----------+------------------+------------+-----------------+-----------+-------------+--------------+------------
+TG-100001 | Akampurira Brian | 2026-10-20 | collection      | Completed | 70000       | 0            | 70000      
+TG-100002 | Nuwagaba Grace   | 2026-10-24 | delivery        | Shipped   | 111000      | 5000         | 116000     
+TG-100003 | Tumusiime Peter  | 2026-10-28 | delivery        | Pending   | 150000      | 5000         | 155000     
+TG-100004 | Atuhaire Joan    | 2026-10-30 | collection      | Confirmed | 135000      | 0            | 135000     
+TG-100005 | Mugisha Allan    | 2026-11-01 | collection      | Pending   | 88000       | 0            | 88000      
+(5 row(s))
+
+[R6 Items in order TG-100002]
+SELECT o.order_no, p.name, oi.quantity, oi.unit_price, oi.quantity*oi.unit_price AS line_total FROM order_items oi JOIN orders o USING(order_id) JOIN products p USING(product_id) WHERE o.order_no='TG-100002';
+>>> RESULT
+order_no  | name              | quantity | unit_price | line_total
+----------+-------------------+----------+------------+-----------
+TG-100002 | Stereo Headphones | 1        | 55000      | 55000     
+TG-100002 | Flash Disk 32GB   | 2        | 28000      | 56000     
+(2 row(s))
+
+[R7 Low stock report (5 or fewer)]
+SELECT name, stock FROM products WHERE stock <= 5 ORDER BY stock;
+>>> RESULT
+name                  | stock
+----------------------+------
+Gaming Mouse 3200 DPI | 0    
+Laptop Backpack       | 0    
+USB Wi-Fi Adapter     | 3    
+8-Port Network Switch | 5    
+(4 row(s))
+
+[U1 Change a product price]
+UPDATE products SET price = 42000 WHERE sku='keyboard';
+>>> RESULT
+OK (1 row(s) affected)
+
+[U2 Restock a product]
+UPDATE products SET stock = stock + 20 WHERE sku='gamingmouse';
+>>> RESULT
+OK (1 row(s) affected)
+
+[U3 Move an order forward and mark payment as paid]
+UPDATE orders SET status='Shipped' WHERE order_no='TG-100003';
+UPDATE payments SET status='Paid', paid_at='2026-11-01' WHERE order_id=(SELECT order_id FROM orders WHERE order_no='TG-100003');
+>>> RESULT
+OK (1 row(s) affected)
+OK (1 row(s) affected)
+
+[U4 Check the updates]
+SELECT sku, price, stock FROM products WHERE sku IN ('keyboard','gamingmouse');
+SELECT o.order_no, o.status, p.status AS payment FROM orders o JOIN payments p USING(order_id) WHERE o.order_no='TG-100003';
+>>> RESULT
+sku         | price | stock
+------------+-------+------
+gamingmouse | 40000 | 20   
+keyboard    | 42000 | 25   
+(2 row(s))
+order_no  | status  | payment
+----------+---------+--------
+TG-100003 | Shipped | Paid   
+(1 row(s))
+
+[D1 Cancel and delete an order (order_items are removed automatically by ON DELETE CASCADE)]
+UPDATE products SET stock = stock + 1 WHERE sku IN ('webcam','mousepad');  -- return stock
+DELETE FROM orders WHERE order_no='TG-100005';
+SELECT COUNT(*) AS items_left_for_TG_100005 FROM order_items WHERE order_id NOT IN (SELECT order_id FROM orders);
+>>> RESULT
+OK (2 row(s) affected)
+OK (1 row(s) affected)
+items_left_for_TG_100005
+------------------------
+0                       
+(1 row(s))
+
+[D2 Delete a product that was never sold]
+DELETE FROM products WHERE sku='webcam';
+>>> RESULT
+OK (1 row(s) affected)
+
+[D3 Confirm deletions]
+SELECT COUNT(*) AS products FROM products;
+>>> RESULT
+products
+--------
+24      
+(1 row(s))
+
+============================================================
+CONSTRAINT TESTS (each statement must be rejected)
+PASS  Negative stock
+      -> CHECK constraint failed: stock >= 0
+PASS  Duplicate SKU
+      -> UNIQUE constraint failed: products.sku
+PASS  Product with missing category (FK)
+      -> FOREIGN KEY constraint failed
+PASS  Order for missing customer (FK)
+      -> FOREIGN KEY constraint failed
+PASS  Invalid order status (CHECK)
+      -> CHECK constraint failed: status IN ('Pending','Confirmed','Shipped','Completed','Cancelled')
+PASS  Delete category that still has products (RESTRICT)
+      -> FOREIGN KEY constraint failed
+PASS  Delete a product that was sold (RESTRICT)
+      -> FOREIGN KEY constraint failed

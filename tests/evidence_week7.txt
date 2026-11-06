@@ -1,0 +1,72 @@
+TECHGEAR WEEK 7 TEST EVIDENCE
+============================================================
+REGISTRATION
+PASS  Register with valid details creates account and logs in
+      -> 201, email stored lower-case
+PASS  Session cookie is HttpOnly and SameSite=Lax
+      -> tg_session=dYhvJg0eu... HttpOnly; Path=/; SameSite=Lax
+PASS  Password is stored as a salted scrypt hash, not plain text
+      -> scrypt:32768:8:1$xhsMjTBZ0Fotrkpg$c1dc46...
+PASS  Only a SHA-256 hash of the session token is stored
+PASS  Weak password rejected (too short)
+      -> Password must be at least 8 characters.
+PASS  Weak password rejected (no number)
+      -> Password needs at least one letter and one number.
+PASS  Weak password rejected (common password)
+      -> That password is too common.
+PASS  Weak password rejected (contains email name)
+      -> Password must not contain your email name.
+PASS  Invalid email/phone/name rejected
+      -> ['email', 'full_name', 'phone']
+PASS  Duplicate email rejected
+      -> An account with those details already exists. Try logging in.
+PASS  Duplicate phone rejected
+PASS  Quotes/HTML in names stored as plain data (SQL-injection safe; page uses textContent)
+
+LOGIN, LOGOUT AND SESSIONS
+PASS  Wrong password and unknown email give the same 401 message
+      -> Incorrect email or password.
+PASS  SQL injection in login fails
+PASS  Seeded guest customer (no password) cannot log in
+PASS  Protected route without session returns 401
+PASS  Correct login works (email is case-insensitive)
+PASS  Each login issues a new session token (no fixation)
+PASS  Account locks after 5 failed attempts
+      -> 429 even with a correct password while locked
+PASS  Logout without CSRF token is rejected
+PASS  Logout with CSRF token succeeds
+PASS  Session is invalid after logout
+PASS  Session expires after 30 minutes idle
+PASS  Session expires after absolute lifetime (8 hours)
+PASS  Non-JSON (cross-site form style) POST is rejected
+
+PROFILE AND PASSWORD
+PASS  Profile update with CSRF token works
+PASS  Profile update without CSRF token is rejected
+PASS  Cannot take another customer's email
+PASS  Change password needs the correct current password
+PASS  New password must meet the rules
+PASS  Password change succeeds
+PASS  Other devices are logged out after password change
+PASS  Old password no longer works, new one does
+
+AUTHORIZATION (ROLES)
+PASS  Customer cannot open admin API
+PASS  Anonymous user cannot open admin API
+PASS  Admin can list customers
+PASS  Admin list never exposes password hashes
+PASS  Public registration cannot create an admin
+
+ORDERS LINKED TO ACCOUNT
+PASS  Logged-in customer can place an order (prices taken from the database)
+      -> {'delivery_fee': 5000, 'duplicate': False, 'order_no': 'TG-319704', 'subtotal': 92000, 'total': 97000}
+PASS  Stock is reduced by the order
+PASS  Order over available stock is rejected and changes nothing
+PASS  Customer sees only their own orders
+PASS  Anonymous user cannot place an order
+
+SITE EXPOSURE AND HEADERS
+PASS  Database file is not downloadable
+PASS  Path traversal is blocked
+PASS  Pages are served with security headers
+RESULT: 46 passed, 0 failed

@@ -1,0 +1,52 @@
+TECHGEAR WEEK 8 CART END-TO-END TESTS (real pages in jsdom against the running server)
+============================================================
+ADD FROM LISTING AND DETAILS PAGES
+PASS  Add to cart from the product listing
+      -> {"mouse":1}
+PASS  Adding again increases quantity; header badge updates
+PASS  Out-of-stock product has a disabled button on the listing
+PASS  Add with a chosen quantity from the details page
+      -> Added to cart. View cart
+PASS  Invalid quantity on details page is rejected with a message
+
+CART PAGE: DISPLAY, TOTALS, UPDATE
+PASS  Shows every selected product
+PASS  Shows unit price and line subtotal (database prices)
+      -> keyboard UGX 42,000 x 2
+PASS  Cart subtotal is correct
+      -> UGX 109,000
+PASS  + button updates quantity, line total, subtotal and storage
+PASS  - button decreases quantity
+PASS  - button is disabled at quantity 1
+PASS  Typed quantity "0" is rejected, old quantity kept
+PASS  Typed quantity "-3" is rejected, old quantity kept
+PASS  Typed quantity "abc" is rejected, old quantity kept
+PASS  Typed quantity "2.5" is rejected, old quantity kept
+PASS  Typed quantity "" is rejected, old quantity kept
+PASS  Typing more than the stock limits quantity to stock and explains why
+      -> Only 40 of Wireless Mouse available, so the quantity was set to 40.
+PASS  Proceed to Checkout leads to the checkout page
+
+STATE SURVIVES REFRESH / NAVIGATION
+PASS  Reloading the cart page shows the same items and subtotal
+PASS  Header badge on another page shows the cart count
+
+REMOVE AND CLEAR
+PASS  Remove deletes one item only
+PASS  Clear needs a second click (no accidental clearing)
+PASS  Second click clears the whole cart
+PASS  Helpful empty-cart message with a link to browse products
+PASS  Empty cart on first visit shows the same message
+
+UNAVAILABLE PRODUCTS AND CHANGED STOCK
+PASS  Out-of-stock and unknown items are flagged
+PASS  Unavailable items are excluded from the subtotal
+PASS  Proceed to Checkout is disabled until they are removed
+PASS  'Remove unavailable items' fixes the cart
+PASS  Quantity above current stock is reduced automatically with a notice
+      -> USB Wi-Fi Adapter: quantity reduced to 3 because only 3 are in stock.
+PASS  Garbage in storage does not break the page
+
+PROCEED TO CHECKOUT (the checkout itself is tested in e2e_checkout.js)
+PASS  Cart links to checkout.html
+RESULT: 32 passed, 0 failed

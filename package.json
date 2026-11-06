@@ -1,0 +1,1 @@
+{ "name": "techgear", "private": true, "description": "Only needed to run tests/e2e_cart.js", "devDependencies": { "jsdom": "^26.0.0" } }

@@ -1,0 +1,116 @@
+TECHGEAR WEEK 9 CHECKOUT AND ORDER TESTS
+============================================================
+ORDER CREATION (steps 4-8)
+PASS  Valid order is created (201) with an order number like TG-123456
+      -> TG-627836
+PASS  Total is computed on the server from database prices (+ delivery fee)
+      -> 97000 = 2 x 25000 + 42000 + 5000
+PASS  Orders record holds the delivery snapshot
+PASS  Order_Items records created with the unit price at time of sale
+PASS  Stock is reduced in the same transaction
+PASS  Payment row and first status-history row are created
+PASS  Order numbers are unique
+PASS  Prices sent by the browser are ignored
+      -> total 25000
+PASS  If the price changed since the customer looked, order is refused with the new total
+
+EMPTY CART, INVALID DELIVERY DETAILS, SECURITY (step 11)
+PASS  Empty cart rejected
+PASS  Missing cart rejected
+PASS  Invalid details rejected on the server: name too short
+      -> Enter the receiver's full name (2-80 characters).
+PASS  Invalid details rejected on the server: empty name
+      -> Enter the receiver's full name (2-80 characters).
+PASS  Invalid details rejected on the server: phone with letters
+      -> Enter a valid phone number (9-15 digits).
+PASS  Invalid details rejected on the server: phone too short
+      -> Enter a valid phone number (9-15 digits).
+PASS  Invalid details rejected on the server: bad email
+      -> Enter a valid email address or leave it empty.
+PASS  Invalid details rejected on the server: notes too long
+      -> Notes can be at most 200 characters.
+PASS  Invalid details rejected on the server: unknown delivery method
+      -> Choose collection or delivery.
+PASS  Invalid details rejected on the server: delivery without address
+      -> Enter the delivery address (5-200 characters).
+PASS  Invalid details rejected on the server: delivery address too short
+      -> Enter the delivery address (5-200 characters).
+PASS  Invalid details rejected on the server: delivery without district
+      -> Enter the town or district (2-60 characters).
+PASS  Invalid details rejected on the server: cash on delivery for a collection order
+      -> Choose a payment method: Cash at shop or Mobile money.
+PASS  Invalid details rejected on the server: cash at shop for a delivery order
+      -> Choose a payment method: Cash on delivery or Mobile money.
+PASS  Invalid details rejected on the server: unknown payment method
+      -> Choose a payment method: Cash at shop or Mobile money.
+PASS  None of the invalid submissions created an order or changed stock
+PASS  HTML/SQL text in names is stored as plain text (parameterised SQL)
+PASS  Collection order ignores address; Mobile money allowed
+PASS  Invalid quantity rejected: quantity 0
+PASS  Invalid quantity rejected: negative quantity
+PASS  Invalid quantity rejected: decimal quantity
+PASS  Invalid quantity rejected: text quantity
+PASS  Invalid quantity rejected: quantity 100
+PASS  Invalid quantity rejected: boolean quantity
+PASS  Unknown product rejected
+PASS  Anonymous user cannot order
+PASS  Order without CSRF token is rejected
+PASS  Non-JSON order request is rejected
+
+INSUFFICIENT STOCK (step 5 and 11)
+PASS  Ordering more than the stock is refused (409) and every problem is listed
+      -> Laptop Backpack is out of stock.; Wi-Fi Router: only 3 left (you asked for 5).
+PASS  Whole order is rolled back: no order, no stock change even for the available item
+PASS  Ordering exactly the remaining stock works and leaves 0
+PASS  Next customer then sees it as out of stock
+
+REPEATED SUBMISSION (step 11)
+PASS  Submitting the same checkout twice returns the same order
+PASS  Only one order was created and stock was reduced once
+PASS  Four simultaneous submissions with one key create exactly one order
+      -> [200, 200, 200, 201]
+PASS  A different key (a deliberate second order) creates a second order
+PASS  Bad checkout key rejected
+PASS  Two customers racing for the last unit: exactly one wins, stock never negative
+
+ORDER DETAIL AND HISTORY (steps 8-9)
+PASS  Owner can open the order confirmation with accurate details
+PASS  Line totals add up to the subtotal and total
+PASS  Another customer gets 404 for this order (cannot even confirm it exists)
+PASS  Anonymous user cannot open an order
+PASS  Malformed order numbers return 404
+PASS  Order history lists only the customer's own orders
+      -> 14 orders
+PASS  Second customer's history does not contain them
+PASS  Admin can open any order and sees the customer
+
+CUSTOMER CANCEL AND INVENTORY
+PASS  Other customer cannot cancel it
+PASS  Cancel without CSRF token is rejected
+PASS  Customer can cancel a Pending order; stock is returned
+PASS  Cancelled order is in the history table
+PASS  A cancelled order cannot be cancelled again
+
+ADMIN ORDER LIST AND STATUS UPDATE (step 10)
+PASS  Customer cannot use the admin order API
+PASS  Anonymous user cannot use the admin order API
+PASS  Admin sees all orders with customer, total and allowed next statuses
+PASS  Admin can filter by status
+PASS  Admin can search by order number and by customer name
+PASS  Search treats % and _ as plain characters
+PASS  Status update without CSRF token is rejected
+PASS  Pending -> Completed is not allowed (steps cannot be skipped)
+PASS  Unknown status rejected
+PASS  Pending -> Confirmed
+PASS  Confirmed -> Shipped (delivery order)
+PASS  Shipped -> Cancelled is not allowed
+PASS  Shipped -> Completed marks the payment as Paid
+PASS  Completed is final
+PASS  Customer sees the whole status history with admin note
+      -> ['Pending', 'Confirmed', 'Shipped', 'Completed']
+PASS  Collection order cannot be 'Shipped'
+PASS  Admin cancelling an order puts the stock back
+PASS  Status change for an unknown order returns 404
+PASS  Week 6 seed orders (no history rows) still display
+PASS  Migration can be run again safely
+RESULT: 80 passed, 0 failed

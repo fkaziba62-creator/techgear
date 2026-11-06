@@ -1,0 +1,538 @@
+<!DOCTYPE html><html lang="en"><head><base href="../../../">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout | TechGear Computer Accessories Shop</title>
+<style>/* TechGear stylesheet: variables, base, layout, components, responsive */
+:root {
+  --ink: #12303a;
+  --teal: #0f5c5c;
+  --sun: #ffb703;
+  --bg: #f4f7f7;
+  --card: #fff;
+  --line: #d6e0e2;
+  --radius: 10px
+}
+
+* {
+  box-sizing: border-box
+}
+
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.55
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px
+}
+
+img {
+  max-width: 100%;
+  display: block
+}
+
+a {
+  color: var(--teal)
+}
+
+h1 {
+  font-size: 2.3rem;
+  line-height: 1.15;
+  margin: .3em 0
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin: 1.6em 0 .6em
+}
+
+/* header and navigation */
+.site-header {
+  background: var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 5
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.3rem
+}
+
+nav ul {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0
+}
+
+nav a {
+  display: block;
+  color: #dbe8ea;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px
+}
+
+nav a:hover,
+nav a.active {
+  background: var(--sun);
+  color: var(--ink)
+}
+
+.menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid #577;
+  color: #fff;
+  font-size: 1.4rem;
+  padding: 2px 12px;
+  border-radius: 6px
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 2px
+}
+
+/* hero */
+.hero {
+  background: var(--teal);
+  color: #fff;
+  padding: 56px 0
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: center
+}
+
+.hero p {
+  max-width: 52ch;
+  color: #d8eeee
+}
+
+.hero-art {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px
+}
+
+.hero-art img {
+  border-radius: var(--radius)
+}
+
+.btn {
+  display: inline-block;
+  background: var(--sun);
+  color: var(--ink);
+  border: 0;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 8px
+}
+
+.btn:hover {
+  filter: brightness(.93)
+}
+
+.btn.ghost {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #9cc
+}
+
+.btn.small {
+  padding: 8px 14px;
+  font-size: .9rem;
+  width: 100%
+}
+
+.perks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px
+}
+
+.perks p {
+  margin: 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--sun);
+  background: var(--card)
+}
+
+/* product cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px
+}
+
+.card img {
+  border-radius: 6px
+}
+
+.card h3 {
+  font-size: 1.05rem;
+  margin: 10px 0 2px
+}
+
+.price {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0
+}
+
+.stock {
+  color: #1b7a43;
+  font-size: .9rem;
+  margin: 0 0 10px
+}
+
+.more {
+  text-align: right
+}
+
+.cats ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0
+}
+
+.cats a {
+  display: block;
+  padding: 10px 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  text-decoration: none
+}
+
+.cats a:hover {
+  background: var(--sun)
+}
+
+/* products, cart, forms */
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  padding: 10px;
+  border: 1px solid #9bb;
+  border-radius: 8px;
+  width: 100%
+}
+
+.filters input {
+  flex: 2
+}
+
+.filters select {
+  flex: 1
+}
+
+.cart-row {
+  display: grid;
+  grid-template-columns: 70px 1fr auto auto auto;
+  gap: 14px;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px;
+  margin-bottom: 10px
+}
+
+.cart-row input {
+  width: 64px
+}
+
+.linkbtn {
+  background: none;
+  border: 0;
+  color: #b3261e;
+  cursor: pointer;
+  text-decoration: underline;
+  font: inherit
+}
+
+.checkout label {
+  display: block;
+  margin: 8px 0
+}
+
+.checkout input[type=radio] {
+  width: auto
+}
+
+.total {
+  font-size: 1.2rem
+}
+
+.prose {
+  max-width: 720px
+}
+
+.prose label {
+  display: block;
+  margin: 12px 0
+}
+
+#orderMsg,
+#formMsg {
+  color: #1b7a43;
+  font-weight: 700
+}
+
+/* footer */
+.site-footer {
+  background: var(--ink);
+  color: #cfe0e3;
+  margin-top: 56px;
+  padding-top: 28px
+}
+
+.site-footer a {
+  color: var(--sun)
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px
+}
+
+.site-footer h3 {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0 0 6px
+}
+
+.copy {
+  text-align: center;
+  font-size: .85rem;
+  border-top: 1px solid #2b4c56;
+  margin: 20px 0 0;
+  padding: 14px
+}
+
+/* responsive */
+@media (max-width:760px) {
+  h1 {
+    font-size: 1.8rem
+  }
+
+  .menu-btn {
+    display: block
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    background: var(--ink);
+    padding: 8px 20px 14px
+  }
+
+  nav.open {
+    display: block
+  }
+
+  nav ul {
+    flex-direction: column
+  }
+
+  .hero {
+    padding: 36px 0
+  }
+
+  .hero-grid,
+  .footer-grid,
+  .perks {
+    grid-template-columns: 1fr
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px
+  }
+
+  .filters {
+    flex-direction: column
+  }
+
+  .cart-row {
+    grid-template-columns: 56px 1fr auto
+  }
+}
+
+@media (max-width:420px) {
+  .grid {
+    grid-template-columns: 1fr
+  }
+}
+/* Week 5: catalogue */
+.filters{flex-wrap:wrap;align-items:center}
+.filters input{flex:2 1 220px}.filters select{flex:1 1 150px}
+.filters #maxPrice{flex:1 1 150px}
+.filters .chk{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.filters .chk input{width:auto}
+.filters .btn.small{width:auto;margin:0}
+.card h3 a{color:var(--ink);text-decoration:none}.card h3 a:hover{text-decoration:underline}
+.cat-tag{font-size:.8rem;color:#567;margin:0}
+.stock.low{color:#b26a00}.stock.out{color:#b3261e}
+.btn:disabled{background:#ccd;cursor:not-allowed;filter:none}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.detail-grid>img{border-radius:var(--radius);border:1px solid var(--line);background:#fff}
+.price.big{font-size:1.8rem}
+.meta{padding-left:18px;color:#456}
+#qty{width:90px;display:inline-block;margin:0 8px}
+#addMsg{font-weight:700;color:#1b7a43}
+@media(max-width:760px){.detail-grid{grid-template-columns:1fr}}
+
+/* Week 7: accounts */
+.auth-box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;max-width:460px;margin:20px 0}
+.auth-box label{display:block;margin:10px 0}
+.account-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.account-grid .auth-box{max-width:none;margin:0}
+.form-error{color:#b3261e;font-weight:700;min-height:1.4em;margin:6px 0}
+.hint{font-size:.85rem;color:#567;margin:0}
+#accountMsg,#adminMsg{color:#1b7a43;font-weight:700}
+.btn.ghost-dark{background:transparent;border:2px solid var(--ink)}
+.order-row{grid-template-columns:1.2fr 2fr auto auto}
+.table-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;background:var(--card)}
+.tbl th,.tbl td{padding:8px 12px;border:1px solid var(--line);text-align:left}
+.tbl th{background:var(--ink);color:#fff}
+@media(max-width:760px){.order-row{grid-template-columns:1fr}}
+
+/* Week 8: shopping cart */
+.cart-line{display:grid;grid-template-columns:80px 1fr auto 110px auto;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px;margin-bottom:10px}
+.cart-line.unavailable{background:#fbeeee;border-color:#e6b9b6}
+.cart-line img{border-radius:6px;width:80px;height:80px;object-fit:contain;background:#fff}
+.cart-info .stock{margin:0}
+.qty{display:flex;align-items:center;gap:4px}
+.qty input{width:64px;text-align:center}
+.qbtn{width:34px;height:38px;border:1px solid #9bb;background:#fff;border-radius:8px;font-size:1.1rem;cursor:pointer}
+.qbtn:disabled{opacity:.4;cursor:not-allowed}
+.line-total{text-align:right}
+.cart-summary{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:16px 0 0;max-width:420px;margin-left:auto}
+.cart-summary p{margin:4px 0}
+.cart-summary .btn{display:block;width:100%;text-align:center;margin:10px 0 0}
+.cart-summary a:not(.btn){display:inline-block;margin-top:12px}
+.cart-notice p{background:#fff7e0;border-left:4px solid var(--sun);padding:8px 12px;margin:0 0 8px}
+.empty-cart{background:var(--card);border:1px dashed #9bb;border-radius:var(--radius);padding:32px;text-align:center}
+.placeholder-banner{background:#e8f1ff;border-left:4px solid #1b5fa8;padding:10px 14px}
+@media(max-width:760px){.cart-line{grid-template-columns:64px 1fr;}.cart-line img{width:64px;height:64px}.line-total{text-align:left}.cart-summary{max-width:none}}
+
+/* Week 9: checkout and orders */
+.checkout-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start}
+.checkout-grid .auth-box{max-width:none;margin:0 0 16px}
+.checkout-grid textarea{width:100%}
+fieldset{border:1px solid var(--line);border-radius:8px;margin:12px 0;padding:8px 12px}
+.radio{display:block;margin:6px 0}
+.radio input{width:auto}
+.field-error{display:block;color:#b3261e;font-size:.85rem;min-height:1em}
+#orderSummary{position:sticky;top:12px}
+.sum-line{display:flex;justify-content:space-between;gap:10px;margin:6px 0;font-size:.95rem}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.82rem;font-weight:700;background:#e4eef0;color:#12303a}
+.badge-pending{background:#fff3cd;color:#7a5a00}.badge-confirmed{background:#dbeafe;color:#1b4b91}.badge-shipped{background:#e9ddff;color:#4b2a91}
+.badge-completed{background:#d8f3e3;color:#1b6b3c}.badge-cancelled{background:#fbe0de;color:#a02018}
+.confirm-banner{background:#d8f3e3;border:1px solid #9fd8b5;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px}
+.confirm-banner h1{margin:0 0 8px}.order-no{font-size:2rem;font-weight:800;letter-spacing:1px;margin:4px 0}
+.timeline li{margin:4px 0}
+#orderMsg{color:#1b7a43;font-weight:700}
+.tbl select{margin-right:6px;padding:6px}
+@media(max-width:860px){.checkout-grid{grid-template-columns:1fr}#orderSummary{position:static}}
+.brand img{width:36px!important;height:36px!important}input[type=radio]{display:inline-block;width:13px!important;height:13px!important;border-radius:50%;padding:0;margin-right:6px;vertical-align:middle}input[type=radio][checked]{background:#0f5c5c;border-color:#0f5c5c}.radio{display:block}</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html"><img src="images/logo.svg" alt="" width="36" height="36"><span>TechGear</span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <nav id="mainNav" aria-label="Main"><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="cart.html" class="active">Cart (<span id="cartCount">3</span>)</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li><li><a href="account.html">Hi, Grace</a></li><li><a href="orders.html">My orders</a></li><li><a href="#" id="navLogout">Log out</a></li></ul></nav>
+  </div>
+</header>
+<main class="wrap"><h1>Checkout</h1>
+<div id="checkoutGate" hidden=""><p>Loading...</p></div>
+<div id="checkoutBody"><div class="checkout-grid">
+<form id="checkoutForm" novalidate="">
+<section class="auth-box"><h2>1. Contact and delivery</h2>
+<label>Receiver full name *<input type="text" id="coName" name="recipient_name" autocomplete="name" maxlength="80" value="Grace Nuwagaba"></label><span class="field-error" data-err="recipient_name"></span><label>Phone number *<input type="tel" id="coPhone" name="recipient_phone" autocomplete="tel" placeholder="e.g. 0761 421 472" value="0772300999"></label><span class="field-error" data-err="recipient_phone"></span><label>Email (optional)<input type="email" id="coEmail" name="recipient_email" autocomplete="email" value="grace@example.com"></label><span class="field-error" data-err="recipient_email"></span>
+<fieldset><legend>How do you want to receive your order? *</legend>
+<label class="radio"><input type="radio" name="delivery_method" value="collection"> Collect from the shop (free)</label>
+<label class="radio"><input type="radio" name="delivery_method" value="delivery" checked=""> Delivery (UGX 5,000)</label></fieldset><span class="field-error" data-err="delivery_method"></span>
+<div id="deliveryFields"><label>Delivery address *<input type="text" id="coAddress" name="delivery_address" autocomplete="street-address" maxlength="200" value=""></label><span class="field-error" data-err="delivery_address"></span><label>Town / district *<input type="text" id="coDistrict" name="delivery_district" autocomplete="address-level2" maxlength="60" value=""></label><span class="field-error" data-err="delivery_district"></span></div>
+<label>Order notes (optional)<textarea id="coNotes" name="notes" rows="2" maxlength="200"></textarea></label><span class="field-error" data-err="notes"></span>
+</section>
+<section class="auth-box"><h2>2. Payment</h2><div id="payOptions"><label class="radio"><input type="radio" name="payment_method" value="Cash on delivery" checked=""> Cash on delivery</label><label class="radio"><input type="radio" name="payment_method" value="Mobile money"> Mobile money</label></div><span class="field-error" data-err="payment_method"></span>
+<p class="hint">You pay when you collect or receive the order. No card details are collected on this site.</p></section>
+<div id="checkoutError" class="form-error" role="alert"></div>
+<button class="btn" id="placeOrder" type="submit">Place order</button>
+</form>
+<aside class="auth-box" id="orderSummary" aria-label="Order summary"><h2>3. Order summary</h2><div id="summaryLines"><div class="sum-line"><span>USB Keyboard x 1 @ UGX 42,000</span><strong>UGX 42,000</strong></div><div class="sum-line"><span>Wireless Mouse x 2 @ UGX 25,000</span><strong>UGX 50,000</strong></div></div>
+<p>Subtotal: <strong id="sumSub">UGX 92,000</strong></p><p>Delivery: <strong id="sumFee">UGX 5,000</strong></p><p class="total">Total: <strong id="sumTotal">UGX 97,000</strong></p>
+<a href="cart.html">Edit cart</a></aside></div></div>
+<p id="orderMsg" role="status"></p></main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div><h3>TechGear Computer Accessories Shop</h3><p>Kitagata, Sheema District, Uganda</p></div>
+    <div><h3>Contact</h3><p>Phone: +256 761 421 472<br>Email: info@techgear.example</p></div>
+    <div><h3>Shop</h3><p><a href="products.html">All products</a><br><a href="about.html">Delivery &amp; collection</a><br><a href="contact.html">Returns policy</a></p></div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+</body></html>

@@ -1,0 +1,44 @@
+TECHGEAR WEEK 9 END-TO-END JOURNEY (real pages in jsdom against the running server)
+============================================================
+CHECKOUT PAGE
+PASS  Guest is asked to log in or register; cart is kept
+PASS  Logged-in customer sees the checkout form, prefilled with account details
+PASS  Order summary lists items, quantities, unit prices and line totals
+PASS  Collection: delivery fee is free and total = subtotal
+PASS  Choosing delivery shows address fields, adds the fee and changes payment options
+PASS  Server validation errors appear next to the fields (phone, address, district)
+      -> Enter a valid phone number (9-15 digits). | Enter the delivery address (5-200 characters).
+PASS  Nothing was ordered and the cart is untouched
+PASS  Insufficient stock: order refused, problem item named, link back to cart
+      -> Some items cannot be ordered. Please review your cart.Wireless Mouse: only 1 left (you asked for 2).Go back to your cart | 
+PASS  Price changed in the database: customer is told and the summary shows the new total
+      -> UGX 98,000
+PASS  Still no order created
+PASS  Order is placed and a confirmation link with the order number is shown
+      -> TG-839058
+PASS  Double click created exactly one order
+PASS  Cart is emptied after the order
+PASS  Database: order, items, payment and history rows exist; stock reduced once
+
+CONFIRMATION, HISTORY, PRIVACY
+PASS  Confirmation page thanks the customer and shows the order number
+PASS  Confirmation shows accurate items, delivery details and total
+PASS  Cancel button is offered while the order is Pending
+PASS  Order history lists the order with status and total
+PASS  Another customer cannot open this order
+PASS  Other customer's history is empty (shows only their own orders)
+PASS  Guest is not shown any orders
+PASS  Checkout with an empty cart explains and links to products
+
+ADMIN ORDER LIST AND STATUS UPDATE
+PASS  Customer cannot use the admin order page
+PASS  Admin sees the orders including the new one
+PASS  Admin can search by order number
+PASS  Only valid next statuses are offered (Confirmed, Cancelled)
+PASS  Admin updates the status; the list refreshes
+PASS  Customer sees the new status and the status history
+      -> Pending - 2026-11-02 19:53 UTC (Order placed)Confirmed - 2026-11-02 19:53 UTC
+
+CUSTOMER CANCELS A PENDING ORDER
+PASS  Cancelling puts the stock back and marks the order Cancelled
+RESULT: 29 passed, 0 failed
